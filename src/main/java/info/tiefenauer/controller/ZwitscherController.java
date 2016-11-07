@@ -1,5 +1,7 @@
 package info.tiefenauer.controller;
 
+import info.tiefenauer.model.ZwischerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,8 +20,16 @@ import java.util.Collections;
 @RequestMapping("/tweets")
 public class ZwitscherController {
 
+    private final ZwischerRepository repository;
+
+    @Autowired
+    public ZwitscherController(ZwischerRepository repository) {
+        this.repository = repository;
+    }
+
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public HttpEntity<Collection<String>> tweets(){
-        return new ResponseEntity<Collection<String>>(Collections.singleton("Hello World."), HttpStatus.OK);
+        Collection<String> tweets = repository.search("cloudnativenerd", 23);
+        return new ResponseEntity<>(tweets, HttpStatus.OK);
     }
 }
