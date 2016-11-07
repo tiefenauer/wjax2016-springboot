@@ -1,0 +1,7 @@
+[web]
+address = ":8888"
+
+[consulCatalog]
+endpoint = "192.168.99.100:8500"
+domain = "consul.localhost"
+prefix = "traefik"
