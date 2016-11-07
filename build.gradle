@@ -38,6 +38,10 @@ dependencies {
     compile('org.springframework.cloud:spring-cloud-starter-hystrix')
     compile('org.springframework.boot:spring-boot-starter-social-twitter')
     compile('org.springframework.boot:spring-boot-starter-web')
+
+    compile 'org.springframework.cloud:spring-cloud-starter-consul-discovery'
+    compile 'org.springframework.cloud:spring-cloud-starter-consul-config'
+
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
@@ -68,4 +72,16 @@ task buildDockerImage(type: DockerBuildImage) {
 
 task removeDockerImage(type: DockerRemoveImage) {
     imageId = "$project.name:$version-${System.env['USER']}"
+}
+
+task createConsul(type: Exec, group: 'application', description: 'Create Consul container') {
+    commandLine 'docker', 'run', '-d', '--name', 'zwitscher-consul', '-p', '8400:8400', '-p', '8500:8500', 'consul'
+}
+
+task startConsul(type: Exec, group: 'application', description: 'Start Consul container') {
+    commandLine 'docker', 'start', 'zwitscher-consul'
+}
+
+task stopConsul(type: Exec, group: 'application', description: 'Stop Consul container') {
+    commandLine 'docker', 'stop', 'zwitscher-consul'
 }
